@@ -13,11 +13,11 @@
 
 using namespace std;
 void getToken(char input);
-enum State {Empty, Start};
+enum State {Empty, Start, KWD}; //States for source code. KWD is for key words found in ID
 State state = Empty;
 int main(int argc, const char * argv[]) {
     char c;
-    string TINY = "{"
+    string TINY = "{" //source code
                   "A TINY Program"
                   "CS 3240"
                   "}"
@@ -35,38 +35,38 @@ int main(int argc, const char * argv[]) {
                   "     {}";
     istringstream iss (TINY);
     
-    while(iss){
+    while(iss){      //read source code and pass each char through getToken function
         iss >> c;
         getToken(c);
     }
     return 0;
 }
 
-void getToken(char c){
-    if(c == '}')
+void getToken(char c){ //gather tokens from source and display to console
+    if(c == '}')       // { } are considered comment brakets and will not be printed
         state = Empty;
     switch(state){
         case Empty:
-            if(c == '}')
+            if(c == '}')  //'}' signifies the end of a comment and program will continue with business as usual
                 state = Start;
             else
             break;
-        case Start:
-            if(isalpha(c))
+        case Start:      // main case to print tokens
+            if(isalpha(c)) //check if letter
                 cout << "ID: " << c << endl;
-            else if(isdigit(c))
+            else if(isdigit(c)) //check if digit
                 cout << "NUM: " << c << endl;
-            else if(ispunct(c)){
+            else if(ispunct(c)){ //check if symbol
                 if(c == ';')
-                    cout << "SEMI: " << c << endl;
+                    cout << "SEMI: " << c << endl; //semi token check
                 else if(c == '{')
-                    state = Empty;
+                    state = Empty; //comment check
                 else if(c == '}')
                     NULL;
                 else if(c == ':')
-                    cout << "ASSIGN: " << c << '=' << endl;
+                    cout << "ASSIGN: " << c << '=' << endl; //bit of a cheat, but it works :P
                 else
-                    cout << "OPR: " << c << endl;
+                    cout << "OPR: " << c << endl; //opr check
             }
             break;
         default:
