@@ -12,27 +12,31 @@
 #include <string>
 
 using namespace std;
+
 void getToken(char input);
 enum State {Empty, Start, KWD}; //States for source code. KWD is for key words found in ID
 State state = Empty;
+vector<char> vec;
+
 int main(int argc, const char * argv[]) {
     char c;
-    string TINY = "{" //source code
-                  "A TINY Program"
-                  "CS 3240"
-                  "}"
-                  " "
-                  " read x;"
-                  "     if 0 < x then"
-                  "         fact := 1;"
-                  "         repeat"
-                  "             fact := {embedded comment}fact * x;"
-                  "             x := x - 1"
-                  "         until x = 0;"
-                  "         write fact"
-                  "     end"
-                  " "
-                  "     {}";
+    string TINY = "{\n" //source code
+            "A TINY Program\n"
+            "CS 3240\n"
+            "}\n"
+            "\n"
+            " read x;\n"
+            "     if 0 < x then\n"
+            "         fact := 1;\n"
+            "         repeat\n"
+            "             fact := {embedded comment}fact * x;\n"
+            "             x := x - 1\n"
+            "         until x = 0;\n"
+            "         write fact\n"
+            "     end\n"
+            " \n"
+            "     {}\n";
+    
     istringstream iss (TINY);
     
     while(iss){      //read source code and pass each char through getToken function
@@ -53,6 +57,7 @@ void getToken(char c){ //gather tokens from source and display to console
             break;
         case Start:      // main case to print tokens
             if(isalpha(c)) //check if letter
+                //state = KWD;  //couldn't get the keyword state to work.
                 cout << "ID: " << c << endl;
             else if(isdigit(c)) //check if digit
                 cout << "NUM: " << c << endl;
@@ -65,10 +70,31 @@ void getToken(char c){ //gather tokens from source and display to console
                     NULL;
                 else if(c == ':')
                     cout << "ASSIGN: " << c << '=' << endl; //bit of a cheat, but it works :P
+                else if (c == '=')
+                    NULL;
                 else
                     cout << "OPR: " << c << endl; //opr check
             }
             break;
+/*        case KWD:                //keyword state. Suppose to work for if, then, else, end, repeat, until, read, write
+            if(isalpha(c)){
+                vec.push_back(c);
+            }
+            else{
+                if(vec.size() == 1)
+                    cout << "ID: " << vec[0] << endl;
+                else if(vec.size() > 1){
+                    cout << "KWD: ";
+                    for(int i = 0; i < vec.size(); i++){
+                    cout << vec[i];
+                    }
+                }
+                cout << endl;
+                vec.clear();
+                state = Start;
+            }
+            break;
+ */
         default:
             break;
     }
